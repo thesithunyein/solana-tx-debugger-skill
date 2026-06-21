@@ -116,7 +116,7 @@ This skill is an **addon**, not a replacement. It installs side-by-side with `so
 
 ## Demo
 
-A live demo is available at: **[TX Explainer Demo](https://solana-tx-explainer.vercel.app)** (coming soon — repo: [thesithunyein/solana-tx-explainer](https://github.com/thesithunyein/solana-tx-explainer))
+A live demo is available at: **[solana-explainer.vercel.app](https://solana-explainer.vercel.app)** — repo: [thesithunyein/solana-tx-explainer](https://github.com/thesithunyein/solana-tx-explainer)
 
 Paste any Solana transaction signature and get an instant human-readable diagnosis.
 
