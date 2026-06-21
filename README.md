@@ -2,6 +2,8 @@
 
 > Paste a failing transaction signature → get a human-readable diagnosis and suggested fix.
 
+![Solana TX Debugger demo](demo.gif)
+
 A [Solana AI Kit](https://github.com/solanabr/solana-ai-kit) skill that turns any coding agent into an expert Solana transaction debugger. It covers the full 2026 stack: Anchor, Token-2022, versioned transactions, address lookup tables, compute budget, CPI, and more.
 
 **🔗 Live demo:** [solana-explainer.vercel.app](https://solana-explainer.vercel.app) — paste a signature (or click *See an example diagnosis*) to watch the skill's logic run in the browser.
