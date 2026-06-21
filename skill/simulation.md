@@ -191,7 +191,7 @@ If you have a failed tx signature and want to re-simulate:
 ```typescript
 // 1. Fetch the failed tx
 const failedTx = await connection.getTransaction(signature, {
-  maxSupportedTransactionVersion: true,
+  maxSupportedTransactionVersion: 0,
 });
 
 // 2. Reconstruct the message

@@ -12,18 +12,18 @@ Find your error in the table of contents, jump to the recipe, apply the fix. Eac
 
 1. [BlockhashNotFound](#1-blockhashnotfound)
 2. [ComputationalBudgetExceeded](#2-computationalbudgetexceeded)
-3. [Anchor: AccountNotSigner (0x1006)](#3-accountnotsigner)
-4. [Anchor: AccountDiscriminatorMismatch (0x1013)](#4-accountdiscriminatormismatch)
-5. [Anchor: ConstraintSeeds / PDA Mismatch (0x100e)](#5-constraintseeds)
-6. [Anchor: InsufficientFundsForRent (0x1016)](#6-insufficientfundsforrent)
-7. [Anchor: UninitializedAccount (0x100b)](#7-uninitializedaccount)
+3. [Anchor: AccountNotSigner (3010 / 0xBC2)](#3-accountnotsigner)
+4. [Anchor: AccountDiscriminatorMismatch (3002 / 0xBBA)](#4-accountdiscriminatormismatch)
+5. [Anchor: ConstraintSeeds / PDA Mismatch (2006 / 0x7D6)](#5-constraintseeds)
+6. [Anchor: ConstraintRentExempt (2005 / 0x7D5)](#6-insufficientfundsforrent)
+7. [Anchor: AccountNotInitialized (3012 / 0xBC4)](#7-uninitializedaccount)
 8. [SPL Token: InsufficientFunds (0x1)](#8-spl-insufficientfunds)
-9. [SPL Token: OwnerMismatch (0x3)](#9-spl-ownermismatch)
-10. [SPL Token: AccountNotInitialized (0x6)](#10-spl-notinitialized)
+9. [SPL Token: OwnerMismatch (0x4)](#9-spl-ownermismatch)
+10. [SPL Token: UninitializedState (0x9)](#10-spl-notinitialized)
 11. [Token-2022: Transfer Fee InsufficientFunds](#11-token2022-transferfee)
-12. [Token-2022: AccountFrozen (0x16)](#12-accountfrozen)
+12. [Token-2022: AccountFrozen (0x11)](#12-accountfrozen)
 13. [System: ResultWithNegativeLamports (0x1)](#13-negativelamports)
-14. [System: UnbalancedInstruction (0x7)](#14-unbalancedinstruction)
+14. [Runtime: UnbalancedInstruction](#14-unbalancedinstruction)
 15. [Instruction fell through (0x0)](#15-instructionfellthrough)
 16. [Transaction too large (>1232 bytes)](#16-txtoolarge)
 17. [Transaction version not supported](#17-versionnotsupported)
@@ -89,10 +89,11 @@ const tx = new Transaction().add(
 
 **Log:**
 ```
-Program returned error: "custom program error: 0x1006"
+Program log: AnchorError caused by account: authority. Error Code: AccountNotSigner. Error Number: 3010.
+Program <id> failed: custom program error: 0xbc2
 ```
 
-**Cause:** Anchor error #6 — an account marked `Signer` in `#[derive(Accounts)]` was not passed as a signer.
+**Cause:** Anchor account error **3010 (0xBC2)** — an account marked `Signer` in `#[derive(Accounts)]` was not passed as a signer.
 
 **Fix:**
 ```typescript
@@ -123,11 +124,11 @@ pub struct MyInstruction<'info> {
 
 **Log:**
 ```
-Program log: AnchorError: Error: AccountDiscriminatorMismatch
-Program returned error: "custom program error: 0x1013"
+Program log: AnchorError caused by account: data. Error Code: AccountDiscriminatorMismatch. Error Number: 3002.
+Program <id> failed: custom program error: 0xbba
 ```
 
-**Cause:** The account passed doesn't match the expected Anchor account type (wrong 8-byte discriminator).
+**Cause:** Anchor account error **3002 (0xBBA)** — the account passed doesn't match the expected Anchor account type (wrong 8-byte discriminator).
 
 **Fix:**
 ```typescript
@@ -152,11 +153,11 @@ if (!accountInfo.data.slice(0, 8).equals(expectedDisc)) {
 
 **Log:**
 ```
-Program log: AnchorError: Error: ConstraintSeeds
-Program returned error: "custom program error: 0x100e"
+Program log: AnchorError caused by account: vault. Error Code: ConstraintSeeds. Error Number: 2006.
+Program <id> failed: custom program error: 0x7d6
 ```
 
-**Cause:** PDA derived from seeds doesn't match the account passed.
+**Cause:** Anchor constraint error **2006 (0x7D6)** — the PDA derived from the `seeds`/`bump` constraint doesn't match the account passed.
 
 **Fix:**
 ```typescript
@@ -181,15 +182,15 @@ if (passedAccount.equals(expectedPda)) {
 
 ---
 
-## 6. InsufficientFundsForRent
+## 6. ConstraintRentExempt
 
 **Log:**
 ```
-Program log: AnchorError: Error: InsufficientFundsForRent
-Program returned error: "custom program error: 0x1016"
+Program log: AnchorError caused by account: new_account. Error Code: ConstraintRentExempt. Error Number: 2005.
+Program <id> failed: custom program error: 0x7d5
 ```
 
-**Cause:** Account balance would fall below rent-exempt minimum after the operation.
+**Cause:** Anchor constraint error **2005 (0x7D5)** — an account marked `#[account(rent_exempt = enforce)]` (or being initialized) would fall below the rent-exempt minimum.
 
 **Fix:**
 ```typescript
@@ -211,15 +212,15 @@ const tx = new Transaction().add(fundIx, yourInstruction);
 
 ---
 
-## 7. UninitializedAccount
+## 7. AccountNotInitialized
 
 **Log:**
 ```
-Program log: AnchorError: Error: UninitializedAccount
-Program returned error: "custom program error: 0x100b"
+Program log: AnchorError caused by account: pda. Error Code: AccountNotInitialized. Error Number: 3012.
+Program <id> failed: custom program error: 0xbc4
 ```
 
-**Cause:** Account exists but hasn't been initialized (data is all zeros or discriminator doesn't match).
+**Cause:** Anchor account error **3012 (0xBC4)** — the account is referenced before it has been initialized (no discriminator / zero data).
 
 **Fix:**
 ```typescript
@@ -273,10 +274,10 @@ const amount = accountInfo.data.readBigUInt64LE(64);
 
 **Log:**
 ```
-Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA failed: custom program error: 0x3
+Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA failed: custom program error: 0x4
 ```
 
-**Cause:** The signer is not the owner/delegate of the token account.
+**Cause:** SPL Token error **4 (0x4)** — the signer is not the owner or delegate of the token account. (Note: `0x3` is `MintMismatch`, a different error.)
 
 **Fix:**
 ```typescript
@@ -296,14 +297,14 @@ if (!tokenAccount.owner.equals(wallet.publicKey)) {
 
 ---
 
-## 10. SPL NotInitialized
+## 10. SPL UninitializedState
 
 **Log:**
 ```
-Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA failed: custom program error: 0x6
+Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA failed: custom program error: 0x9
 ```
 
-**Cause:** Token account hasn't been initialized yet.
+**Cause:** SPL Token error **9 (0x9)** `UninitializedState` — the token account hasn't been initialized yet. (Note: `0x6` is `AlreadyInUse`.)
 
 **Fix:**
 ```typescript
@@ -361,10 +362,10 @@ import { transferCheckedWithFee } from "@solana/spl-token-2022";
 
 **Log:**
 ```
-Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb failed: custom program error: 0x16
+Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb failed: custom program error: 0x11
 ```
 
-**Cause:** The token account has been frozen by the mint's freeze authority.
+**Cause:** SPL Token / Token-2022 error **17 (0x11)** `AccountFrozen` — the token account has been frozen by the mint's freeze authority.
 
 **Fix:**
 ```typescript
@@ -417,10 +418,11 @@ if (balance < transferAmount) {
 
 **Log:**
 ```
-Program 11111111111111111111111111111111 failed: custom program error: 0x7
+Transaction simulation failed: Error processing Instruction 0: 
+sum of account balances before and after instruction do not match
 ```
 
-**Cause:** Total lamports in ≠ total lamports out for a System program instruction. This is a hard constraint — SOL can't be created or destroyed.
+**Cause:** This is a **runtime `InstructionError`, not a System `custom program error`** — the sum of lamports across an instruction's accounts changed (SOL can't be created or destroyed within an instruction). Commonly caused by manually crediting lamports without a matching debit.
 
 **Fix:** Ensure the sum of all input lamports equals the sum of all output lamports:
 
@@ -447,11 +449,12 @@ const ix = SystemProgram.transfer({
 
 **Log:**
 ```
-Program log: Instruction fell through
-Program <id> failed: custom program error: 0x0
+Program log: Instruction: <unknown>
+Program log: AnchorError. Error Code: InstructionFallbackNotFound. Error Number: 101.
+Program <id> failed: custom program error: 0x65
 ```
 
-**Cause:** The BPF program didn't match any instruction variant. The instruction discriminator (first 8 bytes of data) doesn't match any known instruction.
+**Cause:** The program didn't match any instruction variant. For Anchor this is error **101 (0x65)** `InstructionFallbackNotFound` — the 8-byte instruction discriminator (sha256("global:<name>")[..8]) doesn't match any handler. Usually a wrong program ID, a stale IDL, or a renamed instruction.
 
 **Fix:**
 ```typescript
@@ -530,13 +533,13 @@ const tx = new VersionedTransaction(message);
 {"code": -32602, "message": "Transaction version (0) is not supported"}
 ```
 
-**Cause:** Fetching a versioned transaction without `maxSupportedTransactionVersion: true`.
+**Cause:** Fetching a versioned (v0) transaction without setting `maxSupportedTransactionVersion`. This option takes a **number** (the max version you support), not a boolean.
 
 **Fix:**
 ```typescript
-// Add maxSupportedTransactionVersion to ALL getTransaction calls
+// Add maxSupportedTransactionVersion: 0 to ALL getTransaction / getParsedTransaction calls
 const tx = await connection.getTransaction(signature, {
-  maxSupportedTransactionVersion: true,
+  maxSupportedTransactionVersion: 0,
 });
 ```
 
@@ -676,7 +679,7 @@ Program <id> failed: custom program error: 0x<code>
 1. Identify the program ID from the logs
 2. Look up the program's source code or IDL on [Solana Explorer](https://explorer.solana.com)
 3. Find the `#[error_code]` enum (for Anchor) or error constants
-4. Map the code: for Anchor, `index = hex_code - 0x1000`
+4. Map the code: convert hex to decimal. For Anchor, user-defined errors are `index = decimal - 6000`; framework errors fall in the 2000 (constraint) / 3000 (account) ranges
 5. If no source available, check the program's documentation or GitHub
 
 ```typescript
@@ -684,14 +687,14 @@ Program <id> failed: custom program error: 0x<code>
 function decodeCustomError(hexCode: string, programId: string): string {
   const code = parseInt(hexCode, 16);
 
-  // Check if it's an Anchor error (0x1000+)
-  if (code >= 0x1000) {
-    const anchorIndex = code - 0x1000;
-    if (anchorIndex < 256) {
-      return `Anchor built-in error #${anchorIndex}`;
-    }
-    return `Custom Anchor error #${anchorIndex - 256} (check program's #[error_code])`;
+  // Anchor framework + user errors are plain decimals (no 0x1000 offset)
+  if (code >= 6000) {
+    return `User-defined #[error_code] #${code - 6000} (code ${code}) — check the program's IDL`;
   }
+  if (code >= 3000) return `Anchor account error ${code}`;
+  if (code >= 2500) return `Anchor require! error ${code}`;
+  if (code >= 2000) return `Anchor constraint error ${code}`;
+  if (code >= 100 && code <= 103) return `Anchor instruction error ${code}`;
 
   // Check known programs
   const programMap: Record<string, string> = {

@@ -12,7 +12,7 @@ import { Connection, PublicKey } from "@solana/web3.js";
 const connection = new Connection("https://api.mainnet-beta.solana.com");
 
 const tx = await connection.getTransaction(signature, {
-  maxSupportedTransactionVersion: true, // REQUIRED for versioned txs
+  maxSupportedTransactionVersion: 0, // REQUIRED for versioned txs
   commitment: "confirmed",
 });
 
@@ -128,9 +128,9 @@ function findFailingProgram(logs: string[]): string | null {
 Versioned transactions (with ALTs) require special handling:
 
 ```typescript
-// MUST set maxSupportedTransactionVersion: true
+// MUST set maxSupportedTransactionVersion: 0
 const tx = await connection.getTransaction(signature, {
-  maxSupportedTransactionVersion: true,
+  maxSupportedTransactionVersion: 0,
 });
 
 // Account keys include ALT-loaded addresses
@@ -143,7 +143,7 @@ If you get `{"code": -32602, "message": "Transaction version (0) is not supporte
 
 ## Checklist Before Diagnosis
 
-- [ ] Fetched full transaction with `maxSupportedTransactionVersion: true`
+- [ ] Fetched full transaction with `maxSupportedTransactionVersion: 0`
 - [ ] Extracted `meta.err` and parsed the error type/code
 - [ ] Read all `logMessages` (bottom-up)
 - [ ] Identified the failing program and its framework (Anchor/SPL/raw BPF)

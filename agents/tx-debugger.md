@@ -18,7 +18,7 @@ Activate when the user:
 
 ### Step 1: Triage
 Load [`skill/triage.md`](../skill/triage.md) and follow it to:
-1. Fetch the transaction using `getTransaction` with `maxSupportedTransactionVersion: true`
+1. Fetch the transaction using `getTransaction` with `maxSupportedTransactionVersion: 0`
 2. Extract `meta.err`, `logMessages`, `computeUnitsConsumed`, `innerInstructions`
 3. Identify the failing program and its framework (Anchor / SPL / raw BPF)
 4. If the transaction hasn't been sent yet, use `simulateTransaction` (see [`skill/simulation.md`](../skill/simulation.md))
@@ -26,7 +26,7 @@ Load [`skill/triage.md`](../skill/triage.md) and follow it to:
 ### Step 2: Classify
 Load [`skill/error-codes.md`](../skill/error-codes.md) and:
 1. Parse the error code from `meta.err` or from the program logs
-2. Strip the `0x1000` offset if it's an Anchor error
+2. If it's an Anchor error, convert hex→decimal and map by range (2000s = constraint, 3000s = account, 6000+ = the program's own `#[error_code]`)
 3. Match against the appropriate error-code map (Anchor, SPL, Token-2022, System, ATA)
 4. If unknown, note it as a custom program error
 

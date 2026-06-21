@@ -31,6 +31,15 @@ The TX Debugger Skill gives your AI agent a structured debugging workflow:
 3. **Diagnose** — identify root cause from program logs, CPI depth, compute usage, and account state
 4. **Prescribe** — provide a concrete fix with runnable code snippets
 
+## How This Is Different
+
+Most "transaction" tooling in the ecosystem focuses on **landing** transactions — retries, priority fees, and RPC reliability. This skill focuses on the opposite, harder problem: **a transaction already failed, now explain *why* and *how to fix it*.**
+
+- **Decodes, not just detects** — maps raw codes (`0x7d6`, `custom program error: 0xbc2`) to the exact framework error (`ConstraintSeeds`, `AccountNotSigner`) using the *real* Anchor/SPL/System/Token-2022 enums — including the fact that user-defined Anchor errors start at **6000**, not the commonly-mistaken `0x1000` offset.
+- **Prescribes a fix** — every recipe ships a runnable code snippet and a prevention tip, not just a definition.
+- **Cross-framework** — Anchor, SPL Token, Token-2022 extensions, System, ALTs/versioned txs, compute budget, and CPI depth in one place.
+- **Verifiable** — the same decoding engine runs in the [live demo](https://solana-explainer.vercel.app), so you can confirm accuracy before you trust it.
+
 ## Installation
 
 ### Standard Install
@@ -68,8 +77,8 @@ This skill is an **addon**, not a replacement. It installs side-by-side with `so
 # Agent output:
 # → Fetched transaction from mainnet
 # → Program: anchor_program (BPF)
-# → Error: custom program error: 0x1006
-# → Match: Anchor Error #6 — "AccountNotSigner"
+# → Error: custom program error: 0xbc2
+# → Match: Anchor Error 3010 (0xBC2) — "AccountNotSigner"
 # → Cause: The account at index 2 was not passed as a signer
 # → Fix: Add .signer(account) to your Anchor accounts struct
 ```

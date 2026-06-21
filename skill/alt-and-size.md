@@ -63,7 +63,7 @@ tx.sign([wallet]);
 ```typescript
 // MUST use maxSupportedTransactionVersion
 const tx = await connection.getTransaction(signature, {
-  maxSupportedTransactionVersion: true,
+  maxSupportedTransactionVersion: 0,
 });
 
 // Access ALT-loaded accounts
@@ -82,12 +82,12 @@ const altAccounts = accountKeys.accountKeysFromLookups;
 {"code": -32602, "message": "Transaction version (0) is not supported"}
 ```
 
-**Cause:** You're fetching a versioned transaction without `maxSupportedTransactionVersion: true`.
+**Cause:** You're fetching a versioned transaction without `maxSupportedTransactionVersion: 0`.
 
 **Fix:**
 ```typescript
 const tx = await connection.getTransaction(signature, {
-  maxSupportedTransactionVersion: true, // ADD THIS
+  maxSupportedTransactionVersion: 0, // ADD THIS
 });
 ```
 

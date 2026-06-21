@@ -52,7 +52,7 @@ await program.methods.myInstruction()
   .rpc();
 ```
 
-### `AccountNotSigner` (Anchor 0x1006)
+### `AccountNotSigner` (Anchor 3010 / 0xBC2)
 
 **Cause:** An account marked with `Signer` in the `#[derive(Accounts)]` struct was not passed as a signer.
 
@@ -79,7 +79,7 @@ pub struct MyInstruction<'info> {
 }
 ```
 
-### `AccountNotWritable` (Anchor 0x1007)
+### `AccountNotMutable` (Anchor 3006 / 0xBBE)
 
 **Cause:** An account marked `mut` in the Accounts struct was passed as read-only.
 
@@ -99,7 +99,7 @@ await program.methods.myInstruction()
   .rpc();
 ```
 
-### `IncorrectProgramId` (Anchor 0x1005)
+### `AccountOwnedByWrongProgram` (Anchor 3007 / 0xBBF)
 
 **Cause:** An account is owned by a different program than expected.
 
@@ -107,15 +107,16 @@ await program.methods.myInstruction()
 
 ```rust
 if account.owner != expected_program_id {
-    return Err(ErrorCode::IncorrectProgramId.into());
+    return Err(ErrorCode::AccountOwnedByWrongProgram.into());
 }
 ```
 
-### `ConstraintSeeds` / PDA Mismatch (Anchor 0x100e)
+### `ConstraintSeeds` / PDA Mismatch (Anchor 2006 / 0x7D6)
 
 **Log pattern:**
 ```
-Program log: AnchorError: Error: ConstraintSeeds
+Program log: AnchorError caused by account: vault. Error Code: ConstraintSeeds. Error Number: 2006.
+Program <id> failed: custom program error: 0x7d6
 ```
 
 **Cause:** The PDA derived from the seeds doesn't match the account passed.
@@ -141,7 +142,7 @@ Common seed mistakes:
 - Forgetting to include the bump seed in the account but not in the derivation
 - Using a different encoding (e.g., `bs58` vs raw bytes)
 
-### `AccountDiscriminatorMismatch` (Anchor 0x1013)
+### `AccountDiscriminatorMismatch` (Anchor 3002 / 0xBBA)
 
 **Cause:** The account's 8-byte discriminator doesn't match the expected Anchor account type.
 
@@ -161,7 +162,7 @@ if (!expectedDiscriminator.equals(actualDiscriminator)) {
 }
 ```
 
-### `UninitializedAccount` (Anchor 0x100b)
+### `AccountNotInitialized` (Anchor 3012 / 0xBC4)
 
 **Cause:** The account exists but hasn't been initialized (discriminator is all zeros or doesn't match).
 
@@ -183,11 +184,11 @@ if (!accountInfo || accountInfo.data.length === 0) {
 
 **Log pattern:**
 ```
-Program log: Instruction fell through
-Program <id> failed: custom program error: 0x0
+Program log: AnchorError. Error Code: InstructionFallbackNotFound. Error Number: 101.
+Program <id> failed: custom program error: 0x65
 ```
 
-**Cause:** The BPF program reached the end of the instruction function without returning. This usually means the instruction dispatcher didn't match any known instruction variant.
+**Cause:** The instruction dispatcher didn't match any known instruction variant (Anchor error **101 / 0x65** `InstructionFallbackNotFound`).
 
 **Fix:** Check the instruction discriminator (first 8 bytes of instruction data). In Anchor, this is `sha256("global:<instruction_name>")[0..8]`.
 
@@ -208,7 +209,7 @@ let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
 anchor_program::cpi::target_instruction(cpi_ctx, data)?;
 ```
 
-### `InsufficientFundsForRent` (Anchor 0x1016)
+### `ConstraintRentExempt` (Anchor 2005 / 0x7D5)
 
 **Cause:** After the operation, the account's lamport balance is below the rent-exempt minimum.
 

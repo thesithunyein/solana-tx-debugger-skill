@@ -34,10 +34,10 @@ Use this skill when a developer needs to:
 
 ## Key Facts (Quick Reference)
 
-- Default compute unit limit per transaction: **200,000 CU** (can be raised via `ComputeBudgetProgram.setComputeUnitLimit`)
+- Default compute budget: **200,000 CU per instruction**, capped at **1,400,000 CU per transaction** (set explicitly via `ComputeBudgetProgram.setComputeUnitLimit`, max 1.4M)
 - Max transaction size: **1,232 bytes** (legacy) / **1,232 bytes** with ALTs (versioned)
 - Max CPI depth: **4** (inner instructions)
-- Anchor error format: `custom program error: 0x<code>` where code = error index in `#[error_code]`
+- Anchor error format: `custom program error: 0x<code>` where the code is a plain number (no offset). Framework errors are in fixed ranges (2000s = constraint, 3000s = account); **user-defined `#[error_code]` errors start at 6000 (0x1770)**, so `index = decimal - 6000`
 - Token-2022 program ID: `TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb`
 - SPL Token program ID: `TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA`
 - System program ID: `11111111111111111111111111111111`
@@ -45,6 +45,6 @@ Use this skill when a developer needs to:
 ## Important Notes
 
 - **Always fetch the full transaction** with `getTransaction` (not just `getSignatureStatuses`) — logs and inner instructions are critical.
-- **Use `maxSupportedTransactionVersion: true`** when fetching versioned transactions, or you'll get an error.
+- **Use `maxSupportedTransactionVersion: 0`** when fetching versioned transactions, or you'll get an error.
 - **Read logs bottom-up** — the last program log line usually contains the actual error.
 - **Check inner instructions** for CPI failures — the failing program may be a callee, not the top-level instruction.

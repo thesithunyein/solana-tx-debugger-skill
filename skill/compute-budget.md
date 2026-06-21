@@ -12,7 +12,7 @@ Every Solana transaction has a **default compute unit limit of 200,000 CU**. Thi
 
 ```typescript
 const tx = await connection.getTransaction(signature, {
-  maxSupportedTransactionVersion: true,
+  maxSupportedTransactionVersion: 0,
 });
 const cuUsed = tx?.meta?.computeUnitsConsumed;
 // Compare against the limit set in the transaction

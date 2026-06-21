@@ -14,7 +14,7 @@ Diagnoses a failed Solana transaction by signature. Fetches the transaction, ext
 ## Workflow
 
 1. **Fetch the transaction**
-   - Use `getTransaction(signature, { maxSupportedTransactionVersion: true, commitment: "confirmed" })`
+   - Use `getTransaction(signature, { maxSupportedTransactionVersion: 0, commitment: "confirmed" })`
    - If not found, check `getSignatureStatuses` — may be unconfirmed or expired
    - If on devnet/testnet, use the appropriate RPC endpoint
 
@@ -59,13 +59,13 @@ Diagnoses a failed Solana transaction by signature. Fetches the transaction, ext
 **Status:** failed
 
 ### Error
-Anchor error 0x1006 — AccountNotSigner
+Anchor error 3010 (0xBC2) — AccountNotSigner
 
 ### Root Cause
 The account at index 2 was not passed as a signer in the transaction.
 
 ### Evidence
-- Log: "Program returned error: custom program error: 0x1006"
+- Log: "AnchorError ... Error Code: AccountNotSigner. Error Number: 3010" / "custom program error: 0xbc2"
 - Account at index 2 (9xY...) is marked Signer in the Anchor accounts struct
 - Transaction signers: [3xY...] — 9xY... is not in the signer list
 
@@ -85,6 +85,6 @@ Always verify signer requirements match your Anchor `#[derive(Accounts)]` struct
 ## Notes
 
 - This command is read-only — it only fetches transaction data, never sends transactions.
-- For versioned transactions, `maxSupportedTransactionVersion: true` is always set.
+- For versioned transactions, `maxSupportedTransactionVersion: 0` is always set.
 - If the transaction succeeded (meta.err is null), report that and show compute usage.
 - If the transaction is not found, suggest checking the network or waiting for confirmation.
