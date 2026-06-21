@@ -30,7 +30,7 @@ The TX Debugger Skill gives your AI agent a structured debugging workflow:
 ### Standard Install
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/solana-tx-debugger-skill.git
+git clone https://github.com/thesithunyein/solana-tx-debugger-skill.git
 cd solana-tx-debugger-skill
 chmod +x install.sh
 ./install.sh
@@ -116,7 +116,7 @@ This skill is an **addon**, not a replacement. It installs side-by-side with `so
 
 ## Demo
 
-A live demo is available at: **[TX Explainer Demo](https://YOUR_DEMO_URL.vercel.app)** (coming soon)
+A live demo is available at: **[TX Explainer Demo](https://solana-tx-explainer.vercel.app)** (coming soon — repo: [thesithunyein/solana-tx-explainer](https://github.com/thesithunyein/solana-tx-explainer))
 
 Paste any Solana transaction signature and get an instant human-readable diagnosis.
 
