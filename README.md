@@ -1,6 +1,22 @@
-# Solana TX Debugger Skill for Claude Code
+<div align="center">
 
-> Paste a failing transaction signature → get a human-readable diagnosis and suggested fix.
+<img src="assets/logo.svg" alt="Solana TX Debugger" width="104" height="104" />
+
+# Solana TX Debugger Skill
+
+### Paste a failing transaction signature → get a human-readable diagnosis and a concrete fix.
+
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-solana--explainer.vercel.app-14F195?style=for-the-badge&logo=vercel&logoColor=white&labelColor=9945FF)](https://solana-explainer.vercel.app)
+
+[![Solana AI Kit](https://img.shields.io/badge/Solana%20AI%20Kit-Skill-9945FF?style=flat-square&logo=solana&logoColor=white)](https://github.com/solanabr/solana-ai-kit)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code%20%2F%20Codex-ready-1f6feb?style=flat-square)](https://github.com/solanabr/solana-ai-kit)
+[![License: MIT](https://img.shields.io/badge/License-MIT-22c55e?style=flat-square)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-ff69b4?style=flat-square)](https://github.com/thesithunyein/solana-tx-debugger-skill/pulls)
+[![Recipes](https://img.shields.io/badge/error%20recipes-22%2B-eab308?style=flat-square)](skill/recipes.md)
+
+</div>
+
+<br />
 
 ![Solana TX Debugger demo](demo.gif)
 
